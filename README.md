@@ -26,7 +26,7 @@ All figures below are as of the 14 August 2026 build, run against the GLEIF file
 | 9 | Fund-level ISINs resolvable to an exact share class by unique pairing alone (v0.1): one class, one ISIN, no ambiguity | **259** of 19,803 funds in the graph (1.3%), drawn from the 2,109 LEIs GLEIF-matched to at least one ISIN; v0.2 closes the hop further, see below |
 | 10 | v0.2: (LEI, ISIN) pairs attested in public N-PORT filings (2026q2 only) that are absent from the GLEIF open mapping | **185,894** absent, **2,055 contradicting**, 47,374 agreeing, of 235,327 filing-attested pairs |
 | 11 | v0.2: ETFs gaining their first open ISIN from the 2026q2 N-PORT harvest; open ETF ISIN coverage after one quarter | **937 gained; 12.3% to 35.4%** |
-| 12 | v0.2: fund-ISIN rows resolved to an exact share class via OpenFIGI ticker join, zero conflicts | **2,186 of 5,176 (42.2%)**, 8.4x the licensed-data-free rate of v0.1 |
+| 12 | v0.2: fund-ISIN rows resolved to an exact share class via OpenFIGI ticker join, zero conflicts | **2,186 of 5,176 (42.2%)**. On that same 5,176-row denominator v0.1 resolved 259 (5.0%), so v0.2 is 8.4x the licensed-data-free rate. Note row 9 quotes 259 against a different population, the 19,803 funds in the graph, which is why the two percentages differ |
 
 The strongest result here is #1: 9.1 million machine-maintained GLEIF records, checked in full against the same arithmetic, with zero check-digit failures, set against hand-keyed regulatory filings that have some. The check is pure arithmetic, so 0.13% is still a real defect rate, not a rounding artefact, even though it is small.
 
