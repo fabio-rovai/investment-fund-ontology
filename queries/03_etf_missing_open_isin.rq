@@ -1,0 +1,19 @@
+# ETFs that certainly trade on a venue but whose LEI has no ISIN in
+# the GLEIF open mapping: the measurable hole in the open
+# identifier fabric. Uses MINUS so both sides evaluate as indexed
+# set operations (497 of 4,053 ETF funds have an ISIN; this lists
+# the other 3,556).
+PREFIX ifo:    <https://gov.tesseract.academy/def/fund#>
+PREFIX ifosch: <https://gov.tesseract.academy/def/fund/scheme#>
+SELECT ?fund ?fundName ?lei
+WHERE {
+  ?fund ifo:hasFeature ifosch:ExchangeTradedFund ;
+        ifo:legalName ?fundName ;
+        ifo:identifiedBy ?id .
+  ?id a ifo:LEI ; ifo:identifierValue ?lei .
+  MINUS {
+    ?isin a ifo:ISIN ; ifo:hasIssuedSecurityIdentifier ?fund .
+  }
+}
+ORDER BY ?fundName
+LIMIT 25

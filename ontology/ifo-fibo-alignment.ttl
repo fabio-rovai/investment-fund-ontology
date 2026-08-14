@@ -1,0 +1,94 @@
+@prefix ifo:     <https://gov.tesseract.academy/def/fund#> .
+@prefix ifosch:  <https://gov.tesseract.academy/def/fund/scheme#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix fibo-sec-fund-fund: <https://spec.edmcouncil.org/fibo/ontology/SEC/Funds/Funds/> .
+@prefix fibo-sec-sec-id:    <https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesIdentification/> .
+@prefix fibo-sec-sec-lst:   <https://spec.edmcouncil.org/fibo/ontology/SEC/Securities/SecuritiesListings/> .
+@prefix fibo-be-le-lei:     <https://spec.edmcouncil.org/fibo/ontology/BE/LegalEntities/LEIEntities/> .
+@prefix fibo-fbc-fi-fi:     <https://spec.edmcouncil.org/fibo/ontology/FBC/FinancialInstruments/FinancialInstruments/> .
+@prefix fibo-fbc-fct-mkt:   <https://spec.edmcouncil.org/fibo/ontology/FBC/FunctionalEntities/Markets/> .
+
+#################################################################
+# IFO to FIBO alignment
+#
+# Method (the same discipline used for the WRAP taxonomy's FoodOn
+# and FoodEx2 crosswalks): every target IRI below was fetched from
+# spec.edmcouncil.org on 2026-08-14 and confirmed to exist in the
+# published Turtle serialisation of its module before being
+# asserted here. Claim strength is graded by evidence:
+#
+#   skos:closeMatch   - definitions describe the same notion with
+#                       compatible scope.
+#   skos:broadMatch   - the FIBO concept properly contains ours.
+#   skos:relatedMatch - overlapping but not substitutable.
+#
+# No exactMatch is asserted anywhere: IFO nodes carry per-source
+# assertion semantics (an Identifier here is an identifier
+# ASSERTION with provenance and validation state), which is a
+# deliberate divergence from FIBO's identifier-as-designator
+# stance. Where FIBO has no counterpart (CUSIP has no named class
+# in the SecuritiesIdentification module), the mapping goes to the
+# nearest verified superconcept and says so, rather than inventing
+# a target.
+#################################################################
+
+<https://gov.tesseract.academy/def/fund/fibo-alignment>
+    a owl:Ontology ;
+    dcterms:title "IFO to FIBO alignment"@en ;
+    dcterms:creator "Fabio Rovai" ;
+    dcterms:created "2026-08-14"^^xsd:date ;
+    rdfs:comment "Graded SKOS alignment from the Investment Fund Ontology to FIBO (EDM Council). All target IRIs verified live against spec.edmcouncil.org on the creation date."@en .
+
+# --- product hierarchy -----------------------------------------
+
+ifo:Fund skos:broadMatch fibo-sec-fund-fund:CollectiveInvestmentVehicle ;
+    rdfs:comment "IFO Fund is an SEC-registered series; FIBO's collective investment vehicle also covers unregistered and non-US pooled vehicles, so the match is broad, not close."@en .
+
+ifo:ShareClass skos:broadMatch fibo-fbc-fi-fi:Security ;
+    skos:relatedMatch fibo-sec-fund-fund:FundUnit ;
+    rdfs:comment "A share class is a security (broad match). FIBO's FundUnit is the individual contractual interest a holder owns; IFO ShareClass is the class of such units, so the two are related, not substitutable."@en .
+
+ifo:Listing skos:closeMatch fibo-sec-sec-lst:Listing ;
+    rdfs:comment "FIBO defines listing as the catalog entry for a securities offering managed by an exchange. IFO Listing additionally covers venue-free quotations (the SEC register publishes tickers with no venue), so scope is slightly wider."@en .
+
+ifo:TradingVenue skos:closeMatch fibo-fbc-fct-mkt:Exchange .
+
+ifo:listedOn rdfs:seeAlso fibo-sec-sec-lst:hasHomeExchange .
+
+# --- identifiers -----------------------------------------------
+
+ifo:ISIN skos:closeMatch fibo-sec-sec-id:InternationalSecuritiesIdentificationNumber .
+ifosch:ISIN skos:closeMatch fibo-sec-sec-id:InternationalSecuritiesIdentificationNumberingScheme .
+
+ifo:LEI skos:closeMatch fibo-be-le-lei:LegalEntityIdentifier .
+ifosch:LEI skos:closeMatch fibo-be-le-lei:LegalEntityIdentifierScheme .
+
+ifo:TickerSymbol skos:closeMatch fibo-sec-sec-id:TickerSymbol .
+
+ifo:CUSIP skos:broadMatch fibo-sec-sec-id:NationalSecuritiesIdentifyingNumber ;
+    rdfs:comment "FIBO's SecuritiesIdentification module defines no named CUSIP class; CUSIP is the US/Canada national securities identifying number, so the mapping goes to the verified NSIN superclass."@en .
+
+ifo:SEDOL skos:broadMatch fibo-sec-sec-id:NationalSecuritiesIdentifyingNumber ;
+    skos:relatedMatch fibo-sec-sec-id:ListedSecurityIdentifier ;
+    rdfs:comment "SEDOL is the UK NSIN and also functions as a per-listing identifier; both verified relationships recorded, neither claimed as close."@en .
+
+ifo:Identifier skos:broadMatch fibo-sec-sec-id:SecurityIdentifier ;
+    rdfs:comment "Partial: IFO Identifier also covers entity identifiers (LEI, CIK), which FIBO's SecurityIdentifier does not. Asserted as broadMatch on the security-identifier subset only; see the per-scheme mappings for precise targets."@en .
+
+# --- fund features ---------------------------------------------
+
+ifosch:ExchangeTradedFund skos:closeMatch fibo-sec-fund-fund:ExchangeTradedFund ;
+    rdfs:comment "IFO's concept is the Form N-CEN self-classification flag; FIBO's is the vehicle class. Same notion, different modality, hence close rather than exact."@en .
+
+ifosch:FundOfFunds skos:closeMatch fibo-sec-fund-fund:FundOfFunds .
+
+# FIBO's Funds module (verified 2026-08-14) defines MutualFund,
+# HedgeFund, ClosedEndInvestment, OpenEndInvestment but no named
+# classes for money market, target date, interval, or master-feeder
+# funds; those IFO features therefore carry no FIBO mapping rather
+# than a forced one.

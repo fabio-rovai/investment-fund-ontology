@@ -1,0 +1,23 @@
+# The semantic bridge across source systems: identifiers carried by
+# funds that have assertions from more than one source system, with
+# origin per assertion. Written subselect-first so set-oriented
+# engines and in-memory evaluators alike run it without a quadratic
+# self-join.
+PREFIX ifo:  <https://gov.tesseract.academy/def/fund#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?fundName ?schemeLabel ?value ?sourceLabel
+WHERE {
+  {
+    SELECT ?fund WHERE {
+      ?fund a ifo:Fund ; ifo:identifiedBy/ifo:sourceSystem ?src .
+    } GROUP BY ?fund HAVING (COUNT(DISTINCT ?src) > 1)
+  }
+  ?fund ifo:legalName ?fundName ; ifo:identifiedBy ?id .
+  ?id ifo:identifierScheme ?scheme ;
+      ifo:identifierValue ?value ;
+      ifo:sourceSystem ?source .
+  ?scheme skos:prefLabel ?schemeLabel .
+  ?source skos:prefLabel ?sourceLabel .
+}
+ORDER BY ?fundName ?schemeLabel
+LIMIT 40

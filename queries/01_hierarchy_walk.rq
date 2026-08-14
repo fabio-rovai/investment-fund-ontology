@@ -1,0 +1,19 @@
+# Walk the full product hierarchy for one ticker: venue-resolved
+# listing -> share class -> fund -> registrant, with every
+# identifier and its validation state along the way.
+PREFIX ifo:  <https://gov.tesseract.academy/def/fund#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?registrantName ?fundName ?className ?mic ?scheme ?value ?checksumOK
+WHERE {
+  ?tickId a ifo:TickerSymbol ; ifo:identifierValue "VOO" ; ifo:identifies ?listing .
+  ?listing ifo:listingOf ?class .
+  OPTIONAL { ?listing ifo:listedOn ?venue .
+             ?venue ifo:identifiedBy/ifo:identifierValue ?mic . }
+  ?class ifo:legalName ?className ; ifo:shareClassOf ?fund .
+  ?fund ifo:legalName ?fundName ; ifo:fundOf ?reg .
+  ?reg ifo:legalName ?registrantName .
+  { ?fund ifo:identifiedBy ?id } UNION { ?reg ifo:identifiedBy ?id }
+  ?id ifo:identifierScheme ?schemeC ; ifo:identifierValue ?value .
+  ?schemeC skos:prefLabel ?scheme .
+  OPTIONAL { ?id ifo:checksumValid ?checksumOK }
+}

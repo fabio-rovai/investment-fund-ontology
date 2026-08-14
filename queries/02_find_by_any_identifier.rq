@@ -1,0 +1,20 @@
+# Resolve any identifier value to what it identifies, with scheme,
+# scope level, source system, and checksum state. The payoff of the
+# reified identifier model: one query answers "what is X?" for an
+# ISIN, LEI, CUSIP, ticker, CIK, or SEC id alike.
+PREFIX ifo:    <https://gov.tesseract.academy/def/fund#>
+PREFIX skos:   <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?value ?schemeLabel ?scopeLabel ?sourceLabel ?subject ?subjectName ?checksumOK
+WHERE {
+  VALUES ?value { "12WZ1W76P8QD4VJ6OB47" "VOO" "549300GCAGWIKTPSSD37" "US68246A1088" }
+  ?id ifo:identifierValue ?value ;
+      ifo:identifierScheme ?scheme ;
+      ifo:sourceSystem ?source .
+  { ?id ifo:identifies ?subject } UNION { ?id ifo:hasIssuedSecurityIdentifier ?x .
+      BIND(?x AS ?subject) } UNION { ?subject ifo:identifiedBy ?id }
+  ?scheme skos:prefLabel ?schemeLabel .
+  OPTIONAL { ?scheme ifo:identifierScope/skos:prefLabel ?scopeLabel }
+  OPTIONAL { ?source skos:prefLabel ?sourceLabel }
+  OPTIONAL { ?subject ifo:legalName ?subjectName }
+  OPTIONAL { ?id ifo:checksumValid ?checksumOK }
+}

@@ -1,0 +1,30 @@
+{
+  "built": "2026-08-14",
+  "sci_registrants": 2316,
+  "sci_series": 14841,
+  "sci_classes": 43344,
+  "sci_tickers": 30238,
+  "ncen_registrant_leis": 2743,
+  "ncen_fund_reports": 12217,
+  "ncen_fund_leis": 12217,
+  "ncen_series_in_sci": 7255,
+  "ncen_etf_listings_venue_resolved": 1130,
+  "ncen_venues": 7,
+  "gleif_file": "lei-isin-20260808T071509.csv",
+  "gleif_total_pairs": 9119948,
+  "gleif_isin_checksum_failures": 0,
+  "gleif_lei_checksum_failures": 0,
+  "gleif_matched_pairs": 7112,
+  "gleif_matched_leis": 2109,
+  "fund_isin_prefixes": {
+    "US": 6985,
+    "DE": 74,
+    "PR": 23,
+    "CH": 15,
+    "GB": 11,
+    "KY": 3,
+    "NL": 1
+  },
+  "isin_unique_pairing_resolved": 259,
+  "graph_triples": 1292541
+}

@@ -1,0 +1,20 @@
+{
+  "conforms": false,
+  "validation_seconds": 27.3,
+  "data_triples": 1293042,
+  "results_by_severity": {
+    "Warning": 37904,
+    "Violation": 4986
+  },
+  "results_by_message": {
+    "Quotation with no resolvable trading venue: the SEC series/class register publishes tickers venue-free, and venue resolu": 29258,
+    "Fund has no LEI assertion from any source system. Not an error in the record; a coverage gap in the identifier fabric wo": 7586,
+    "Fund must belong to exactly one registrant.": 4962,
+    "Registrant with no fund series attached: either a shell registration or a join failure between source systems.": 988,
+    "Ticker symbol deviates from conventional venue symbology (letters, digits, dots; leading letter). Not fatal: ticker conv": 58,
+    "LEI check digits fail ISO 7064 MOD 97-10.": 19,
+    "Investment company file number outside the 811-/814- convention.": 14,
+    "Listing must not name more than one trading venue.": 3,
+    "LEI must be 20 characters ending in 2 check digits (ISO 17442).": 2
+  }
+}

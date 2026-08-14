@@ -1,0 +1,10 @@
+.venv/
+data/*.csv
+data/*.zip
+data/ncen/
+data/build/fund_graph.ttl
+data/build/fund_graph.nq
+data/build/shacl_report.ttl
+data/lei-isin-*.csv
+__pycache__/
+.DS_Store

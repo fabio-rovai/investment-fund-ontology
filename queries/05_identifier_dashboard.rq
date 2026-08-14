@@ -1,0 +1,16 @@
+# Governance dashboard: assertions by scheme, source, and checksum
+# state in one aggregation.
+PREFIX ifo:  <https://gov.tesseract.academy/def/fund#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?schemeLabel ?sourceLabel (COUNT(?id) AS ?assertions)
+       (SUM(IF(BOUND(?ok) && ?ok = false, 1, 0)) AS ?checksumFailures)
+WHERE {
+  ?id a ifo:Identifier ;
+      ifo:identifierScheme ?scheme ;
+      ifo:sourceSystem ?source .
+  ?scheme skos:prefLabel ?schemeLabel .
+  ?source skos:prefLabel ?sourceLabel .
+  OPTIONAL { ?id ifo:checksumValid ?ok }
+}
+GROUP BY ?schemeLabel ?sourceLabel
+ORDER BY DESC(?assertions)
