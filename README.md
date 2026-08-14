@@ -11,21 +11,35 @@ This is not a toy schema with three sample funds. It is the fund product hierarc
 
 ## Findings from the first full build (14 August 2026)
 
+All figures below are as of the 14 August 2026 build, run against the GLEIF file dated 8 August 2026 and four quarters of pinned SEC Form N-CEN data (2025q3-2026q2). The SEC series/class register and the GLEIF file are fetched as "current"/"latest" by `scripts/fetch_data.sh`, not pinned to a snapshot, so a rerun today will not reproduce these exact totals. See "Data currency" below.
+
 | # | Finding | Number |
 |---|---|---|
-| 1 | LEI values inside SEC N-CEN filings that fail the ISO 7064 check digits, including `00000000000000238096` filed as an LEI | **19 failures + 2 malformed** |
-| 2 | GLEIF's published ISIN-LEI file, by contrast, is checksum-clean at full scale (validators self-test against corrupted vectors) | **0 failures in 9,119,948 pairs** |
-| 3 | ETF funds (all exchange-traded by definition) whose LEI has at least one ISIN in the GLEIF open mapping (the Vanguard 500 Index Fund is among the missing) | **only 497 of 4,053 (12.3%)** |
-| 4 | Quotations in the SEC register with no resolvable trading venue in any public SEC dataset | **29,258 of 30,238 (96.8%)** |
-| 5 | Funds reporting their registrant's LEI as their own (umbrella/series identifier collapse) | **214**, plus 13 LEIs shared across sibling funds |
-| 6 | Funds whose registered share classes exceed the class count they reported on their own N-CEN annual report | **2,148** |
-| 7 | US-registered funds issue ISINs under DE, PR, CH, GB, KY and NL prefixes, not only US | **127 non-US ISINs** |
-| 8 | Fund-level ISINs resolvable to an exact share class by unique pairing alone (v0.1) | **259**; v0.2 closes the hop openly, see below |
-| 9 | v0.2: (LEI, ISIN) pairs attested in public N-PORT filings that are absent from the GLEIF open mapping (one quarter) | **185,894** absent, **2,055 contradicting**, 47,374 agreeing |
-| 10 | v0.2: ETFs gaining their first open ISIN from N-PORT harvest; open ETF ISIN coverage after one quarter | **937 gained; 12.3% to 35.4%** |
-| 11 | v0.2: fund-ISIN rows resolved to an exact share class via OpenFIGI ticker join, zero conflicts | **2,186 of 5,176 (42.2%)**, 8.4x the licensed-data-free rate of v0.1 |
+| 1 | GLEIF's open ISIN-to-LEI mapping file, checksum-validated in full, not sampled: every one of 9,119,948 pairs | **0 ISIN or LEI check-digit failures**, out of 9,119,948 (as of the 8 Aug 2026 file). This covers check-digit arithmetic only, not deduplication, staleness of the LEI registrations, or correctness of the entity-to-ISIN mapping itself |
+| 2 | LEI values inside hand-keyed SEC N-CEN filings that fail the same ISO 7064 check digits GLEIF passes in full, including `00000000000000238096` filed as an LEI | **19 of 14,960 LEI values checked (0.127%, ~0.13%)**. 2 of the 19 are also malformed (a subset of the 19, not additional to it) |
+| 3 | ETF funds whose share class has no listing anywhere in public data: the single Violation-severity rule in the ontology's own SHACL layer (every other finding here is Warning-severity) | **73 of 4,053 ETF funds (1.8%)** |
+| 4 | ETF funds (self-reported `IS_ETF=Y` flag on Form N-CEN, not a curated exchange list) whose LEI has at least one ISIN in the GLEIF open mapping file. The Vanguard 500 Index Fund (VOO) is among those missing the link: VOO has a real, valid ISIN in commercial data, GLEIF's open file simply does not carry the LEI-to-ISIN pair for it | **497 of 4,053 (12.3%)** |
+| 5 | Listings in the SEC series/class register with no trading venue resolvable from public SEC data. This is a scope limit of the public schema, not a data-quality failure: the venue field exists only in Form N-CEN's ETF-only exchange table (Item E.1), and most of the 30,238 listings are ordinary open-end mutual fund share classes that have no trading venue at all by design. The ontology's own SHACL shape grades this Warning and states in its message that it is "not an error in the record" | **29,258 of 30,238 (96.8%)** carry no venue; only 1,130 (3.7%) resolve one |
+| 6 | One LEI shared across 27 distinct SEC fund series (the largest of 13 LEIs shared by multiple sibling funds); separately, 214 funds report their registrant's LEI as their own | Very likely a legitimate series-trust structure: one legal entity (one LEI) hosting many SEC series that are not separately incorporated. Graded **Warning**, not Violation, by the ontology's own rules; worth asking about identifier granularity, not evidence of a broken ID |
+| 7 | Funds whose registered share classes exceed the class count they reported on their own N-CEN annual report (Warning-severity; timing between an annual filing and a register snapshot explains part of the gap) | **2,148** |
+| 8 | US-registered funds issue ISINs under DE, PR, CH, GB, KY and NL prefixes, not only US | **127 non-US ISINs**, out of 7,112 GLEIF-mapped ISINs traced to US-registered fund/registrant LEIs |
+| 9 | Fund-level ISINs resolvable to an exact share class by unique pairing alone (v0.1): one class, one ISIN, no ambiguity | **259** of 19,803 funds in the graph (1.3%), drawn from the 2,109 LEIs GLEIF-matched to at least one ISIN; v0.2 closes the hop further, see below |
+| 10 | v0.2: (LEI, ISIN) pairs attested in public N-PORT filings (2026q2 only) that are absent from the GLEIF open mapping | **185,894** absent, **2,055 contradicting**, 47,374 agreeing, of 235,327 filing-attested pairs |
+| 11 | v0.2: ETFs gaining their first open ISIN from the 2026q2 N-PORT harvest; open ETF ISIN coverage after one quarter | **937 gained; 12.3% to 35.4%** |
+| 12 | v0.2: fund-ISIN rows resolved to an exact share class via OpenFIGI ticker join, zero conflicts | **2,186 of 5,176 (42.2%)**, 8.4x the licensed-data-free rate of v0.1 |
+
+The strongest result here is #1: 9.1 million machine-maintained GLEIF records, checked in full against the same arithmetic, with zero check-digit failures, set against hand-keyed regulatory filings that have some. The check is pure arithmetic, so 0.13% is still a real defect rate, not a rounding artefact, even though it is small.
 
 The full numbers, method, and caveats: [BUILD_REPORT.md](BUILD_REPORT.md) and [reports/GOVERNANCE_REPORT.md](reports/GOVERNANCE_REPORT.md).
+
+### Data currency
+
+Two of the three v0.1 source feeds are fetched as "current"/"latest," not pinned to the 14 August 2026 build:
+
+- **Pinned, reproducible exactly:** the four SEC Form N-CEN quarters (2025q3-2026q2) and the 2026q2 N-PORT quarter, all fetched by fixed URL.
+- **Not pinned, will drift:** the SEC Investment Company Series and Class register (fetched from SEC's always-current snapshot URL) and the GLEIF ISIN-to-LEI file (`scripts/fetch_data.sh` scrapes GLEIF's site for the newest file link, not the 8 Aug 2026 file this build used).
+
+Running `bash scripts/fetch_data.sh` today will pull a different SEC register snapshot and a newer, larger GLEIF file, so fund/class counts, GLEIF pair counts, and downstream percentages will not reproduce exactly. The pipeline and methodology are fully reproducible; the specific headline numbers are timestamped to these two snapshots and are not evergreen constants.
 
 ## The open fund identifier map (v0.2)
 
@@ -101,7 +115,7 @@ The source data is not committed (310 MB GLEIF file; SEC files are regenerated a
 
 ## Scope and honesty
 
-v0.1 instance data is US-only by declared scope; the scheme registry models all six target markets (US, UK, IE, AU, CA, MX) so ingestion of the FCA, CBI, APIR, CSA and CNBV registers extends the same graph without remodelling. Licensed identifier fabrics (CUSIP, SEDOL, RIC) are modelled but never asserted as instance data. Every "0 failures" claim is guarded by negative test vectors. See [BUILD_REPORT.md](BUILD_REPORT.md) for the full list of what public data cannot give you; those gaps are findings, and pretending otherwise is how fund data projects fail.
+v0.1 instance data is US-only by declared scope; the scheme registry models all six target markets (US, UK, IE, AU, CA, MX) so ingestion of the FCA, CBI, APIR, CSA and CNBV registers extends the same graph without remodelling. Licensed identifier fabrics (CUSIP, SEDOL, RIC) are modelled but never asserted as instance data. Every "0 failures" claim is guarded by negative test vectors, and every one of them means 0 check-digit failures specifically: ISO 6166 for ISIN, ISO 17442/ISO 7064 MOD 97-10 for LEI. None of them mean the underlying records are deduplicated, current, or otherwise correct beyond that arithmetic; deduplication, staleness and mapping correctness were not tested. See [BUILD_REPORT.md](BUILD_REPORT.md) for the full list of what public data cannot give you; those gaps are findings, and pretending otherwise is how fund data projects fail.
 
 ## Roadmap
 
