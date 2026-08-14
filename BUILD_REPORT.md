@@ -39,3 +39,31 @@ Stated plainly, because each gap is itself a finding:
 - The 59.4 percent N-CEN-to-register match rate is a universe difference, not pure error: the current series/class file lists active series at its publication date, while four quarters of N-CEN include since-terminated series and BDCs. The graph keeps unmatched entities typed so the mismatch stays measurable rather than silently dropped.
 - The 2,148 funds whose observed class count exceeds their N-CEN reported count compare an annual-report-time figure with a register snapshot; timing explains part of the divergence. It is reported as a Warning, not a Violation, for exactly that reason.
 - `AUTHORIZED_SHARES_CNT` in the N-CEN extracts was empirically verified to hold small integers (0 to about 30) consistent with class counts, not share counts, before being used as `ifo:reportedShareClassCount`.
+
+---
+
+# Build report addendum: v0.2 (14 August 2026)
+
+## What was fetched
+
+| Source | Volume | Notes |
+|---|---|---|
+| SEC Form N-PORT structured data, 2026q2 | 440 MB zip; 5,347,869 holding rows; 6,749,116 identifier rows | Public regulatory filings |
+| OpenFIGI mapping API | 5,126 ISIN lookups in 10-job keyless batches at 25 requests/minute (measured live from the server's ratelimit headers), resumable JSONL cache | FIGIs are an OMG open standard, free to store and redistribute |
+
+## What was built
+
+- `pipeline/harvest_nport.py`: 235,327 filing-attested (issuer LEI, ISIN) pairs from one quarter. Against the GLEIF open mapping: 47,374 agree, **185,894 are absent, 2,055 contradict** (filing and GLEIF name different LEIs for the same ISIN). 4 ISINs in filings fail their check digit. For our universe: 1,841 funds gain their first open ISIN, 937 of them ETFs, lifting open ETF ISIN coverage from 12.3% to 35.4%.
+- `pipeline/resolve_figi.py`: of 5,126 fund-level ISINs, 4,423 returned a FIGI and ticker (86.3%); 2,069 joined to exactly one SEC register class by ticker within the fund, with zero ambiguous joins.
+- `open-map/fund_identifier_map.csv`: 5,176 (fund, ISIN) rows, 2,186 resolved to an exact share class (42.2%), 4,471 with FIGIs. Combined resolution methods: figi-ticker-join and v0.1 unique pairing.
+
+## What could NOT be obtained, v0.2 edition
+
+1. **703 ISINs return no FIGI** from OpenFIGI (13.7%). A word-frequency pass over the affected fund names shows no dominant category: they are ordinary equity, bond and portfolio funds, 45 of them with ETF in the name, with only about 5 percent looking money-market or insurance-linked. Why FIGI coverage misses them is an open question this build records rather than answers.
+2. **The unresolved 57.8 percent of map rows** split into: ISINs whose OpenFIGI ticker matches no register ticker in the fund (ticker drift between vendor symbology and the SEC register), funds whose classes carry no register ticker at all, and the no-FIGI set above. Each is measurable from the map file.
+3. **Three further N-PORT quarters** were not harvested in this build; the backfill numbers are a floor, not a ceiling.
+4. **Interpretation caveat on the 2,055 contradictions:** a filing attributing an ISIN to a different LEI than GLEIF is not automatically an error by either side; guarantor versus issuer attribution and umbrella versus series reporting both produce legitimate-looking disagreement. What the number establishes is that the two open sources cannot both be treated as ground truth simultaneously, which is precisely the kind of fact a governance layer must represent rather than resolve by fiat.
+
+## Redistribution policy, restated
+
+No standalone CUSIP, SEDOL, or RIC is read into the graph, stored, or emitted at any stage. ISINs come only from GLEIF's open publication and from public SEC filings; FIGIs from OpenFIGI under the open FIGI standard; everything else is US public record.

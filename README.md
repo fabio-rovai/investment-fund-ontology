@@ -20,9 +20,25 @@ This is not a toy schema with three sample funds. It is the fund product hierarc
 | 5 | Funds reporting their registrant's LEI as their own (umbrella/series identifier collapse) | **214**, plus 13 LEIs shared across sibling funds |
 | 6 | Funds whose registered share classes exceed the class count they reported on their own N-CEN annual report | **2,148** |
 | 7 | US-registered funds issue ISINs under DE, PR, CH, GB, KY and NL prefixes, not only US | **127 non-US ISINs** |
-| 8 | Fund-level ISINs resolvable to an exact share class from public data alone (unique pairing) | **259**; the rest require licensed CUSIP-to-class data |
+| 8 | Fund-level ISINs resolvable to an exact share class by unique pairing alone (v0.1) | **259**; v0.2 closes the hop openly, see below |
+| 9 | v0.2: (LEI, ISIN) pairs attested in public N-PORT filings that are absent from the GLEIF open mapping (one quarter) | **185,894** absent, **2,055 contradicting**, 47,374 agreeing |
+| 10 | v0.2: ETFs gaining their first open ISIN from N-PORT harvest; open ETF ISIN coverage after one quarter | **937 gained; 12.3% to 35.4%** |
+| 11 | v0.2: fund-ISIN rows resolved to an exact share class via OpenFIGI ticker join, zero conflicts | **2,186 of 5,176 (42.2%)**, 8.4x the licensed-data-free rate of v0.1 |
 
 The full numbers, method, and caveats: [BUILD_REPORT.md](BUILD_REPORT.md) and [reports/GOVERNANCE_REPORT.md](reports/GOVERNANCE_REPORT.md).
+
+## The open fund identifier map (v0.2)
+
+The enclosure says the fund-to-class identifier join requires licensed CUSIP data. v0.2 rebuilds it from open sources only:
+
+```
+ISIN (GLEIF open file + SEC N-PORT public filings)
+  -> OpenFIGI (free API over the OMG FIGI open standard)
+  -> ticker + share-class FIGI
+  -> SEC register class, joined by ticker within the fund
+```
+
+The result is [`open-map/fund_identifier_map.csv`](open-map/fund_identifier_map.csv): 5,176 (fund, ISIN) rows, 4,471 carrying FIGIs (86.4%), 2,186 resolved to an exact SEC share class (42.2%) with zero ticker conflicts. Every column is redistributable: LEIs, GLEIF-published and filing-attested ISINs, FIGIs, and public-domain SEC identifiers. No standalone CUSIP, SEDOL, or RIC appears anywhere in the repo, and CONTRIBUTING.md makes that a policy, not an accident. The residual 57.8% is the honest, measured price of refusing licensed data, and three more N-PORT quarters remain to harvest.
 
 ## Why this exists
 
@@ -46,6 +62,11 @@ pipeline/checksums.py             Check-digit algorithms with embedded test vect
 pipeline/build_graph.py           Three-source join -> Turtle + N-Quads
 pipeline/validate.py              pyshacl gate over the full graph
 pipeline/governance_report.py     Set-based rules + automated governance report
+pipeline/resolve_figi.py          v0.2: ISIN -> FIGI/ticker -> share class (open data)
+pipeline/harvest_nport.py         v0.2: N-PORT filings -> (LEI, ISIN) backfill + cross-check
+pipeline/export_open_map.py       v0.2: emits open-map/fund_identifier_map.csv
+open-map/                         The open fund identifier map (committed artifact)
+tests/                            Offline test suite (runs in CI, no downloads)
 queries/*.rq                      SPARQL 1.1 library (01,02,04,05 tested on the full
                                   1.29M-triple graph; 03 on the example subgraph, its
                                   universe numbers computed by the report pipeline)
@@ -64,6 +85,9 @@ bash scripts/fetch_data.sh          # ~70 MB download; set your contact in UA
 .venv/bin/python pipeline/build_graph.py        # ~80s: build 1.29M triples
 .venv/bin/python pipeline/validate.py           # ~30s: SHACL gate
 .venv/bin/python pipeline/governance_report.py  # ~25s: findings report
+.venv/bin/python pipeline/harvest_nport.py      # v0.2: N-PORT backfill + cross-check
+.venv/bin/python pipeline/resolve_figi.py       # v0.2: ~35 min keyless (resumable cache)
+.venv/bin/python pipeline/export_open_map.py    # v0.2: the open identifier map
 ```
 
 The source data is not committed (310 MB GLEIF file; SEC files are regenerated annually); the committed `examples/` subgraph lets you try the queries without any download.
@@ -81,7 +105,8 @@ v0.1 instance data is US-only by declared scope; the scheme registry models all 
 
 ## Roadmap
 
-- v0.2: FIGI ingestion via the OpenFIGI API; FCA and CBI register ingestion (UK/IE market instance data); KGCL-based changelog between annual SEC dataset editions.
+- v0.2 (delivered): OpenFIGI resolution, N-PORT backfill and cross-check, the open identifier map, CI and contribution scaffolding.
+- v0.3: remaining N-PORT quarters; FCA and CBI register ingestion (UK/IE market instance data); KGCL-based changelog between annual SEC dataset editions.
 - v0.3: R2RML mappings as an alternative to the Python pipeline for warehouse-resident source systems; named-graph-per-quarter N-CEN history.
 
 ## Licence

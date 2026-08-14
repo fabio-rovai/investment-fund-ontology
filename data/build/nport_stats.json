@@ -1,0 +1,138 @@
+{
+  "quarter": "2026q2",
+  "nport_holding_lei_isin_pairs": 235327,
+  "isin_checksum_failures_in_filings": 4,
+  "pairs_agreeing_with_gleif": 47374,
+  "pairs_absent_from_gleif": 185894,
+  "pairs_contradicting_gleif": 2055,
+  "disagree_samples": [
+    {
+      "isin": "USG58600AA85",
+      "filing_lei": "549300MZC31PBFF01E87",
+      "gleif_lei": "549300LW4SL5EC0LTL76"
+    },
+    {
+      "isin": "US78015JSL25",
+      "filing_lei": "549300HXQQQCCUBS2Z23",
+      "gleif_lei": "ES7IP3U3RHIGC71XBU11"
+    },
+    {
+      "isin": "US862121AC45",
+      "filing_lei": "5493004EA6C9IHDZ7N66",
+      "gleif_lei": "254900Z9PIEFQ6AYXK50"
+    },
+    {
+      "isin": "US3130ATHY62",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US3130B7QM95",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US16159VBR69",
+      "filing_lei": "529900A7SLLSJMEDIN80",
+      "gleif_lei": "529900EZUBPOKPDSQI35"
+    },
+    {
+      "isin": "US165183DA96",
+      "filing_lei": "549300LG5AUFDML64706",
+      "gleif_lei": "5493000HT7H4OFOD6Z12"
+    },
+    {
+      "isin": "US42250PAA12",
+      "filing_lei": "PZ9HF5U52KPF0MH0QN75",
+      "gleif_lei": "254900M6MTMZM0I22L81"
+    },
+    {
+      "isin": "US313381FD22",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "DE000A3E00M1",
+      "filing_lei": "54930038KPLOYRDHV375",
+      "gleif_lei": "391200NQNTF0AP2MP438"
+    },
+    {
+      "isin": "US3130AM2A90",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US3130B5MX31",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US79587J2C65",
+      "filing_lei": "254900SHCOQLVJ21CT59",
+      "gleif_lei": "635400IPRNPM6HDHRS48"
+    },
+    {
+      "isin": "US42806MCE75",
+      "filing_lei": "5493004IHDYOZ9K9WF47",
+      "gleif_lei": "549300MNOMKDMDFI8J66"
+    },
+    {
+      "isin": "US67120TAA88",
+      "filing_lei": "549300JFGR0M7ULHWG48",
+      "gleif_lei": "254900HCG7N4R7AWFZ60"
+    },
+    {
+      "isin": "US06405LAH42",
+      "filing_lei": "WFLLPEPC7FZXENRZV188",
+      "gleif_lei": "HPFHU0OQ28E4N0NFVK49"
+    },
+    {
+      "isin": "US3130B5B317",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US12667FCQ63",
+      "filing_lei": "5493004SLAYUFMHIS127",
+      "gleif_lei": "549300NHEJTDVQUV3M53"
+    },
+    {
+      "isin": "US61744CNC63",
+      "filing_lei": "5493002PQ8PF80BA0L77",
+      "gleif_lei": "549300RLSHIMYD3FZB52"
+    },
+    {
+      "isin": "US251526BN89",
+      "filing_lei": "7LTWFZYICNSX8D621K86",
+      "gleif_lei": "529900HNOAA1KXQJUQ27"
+    },
+    {
+      "isin": "US46590SAH04",
+      "filing_lei": "529900ELA1S09AZO9Q54",
+      "gleif_lei": "529900LIO4UMWFLNQ670"
+    },
+    {
+      "isin": "US485260BM43",
+      "filing_lei": "COSLT31YNZB2QZPP3422",
+      "gleif_lei": "J75GNWGEO73W89ZV3S44"
+    },
+    {
+      "isin": "US3130B4MW82",
+      "filing_lei": "2549001DPIFGXC1TOL40",
+      "gleif_lei": "QSI3ZLDNZWB2G3888J43"
+    },
+    {
+      "isin": "US423074AF08",
+      "filing_lei": "5493003STKEZ2S0RNU91",
+      "gleif_lei": "549300O4DVEIH6VXSE50"
+    },
+    {
+      "isin": "FR0000073272",
+      "filing_lei": "213800B23SEQ8MCV2T21",
+      "gleif_lei": "969500UIC89GT3UL7L24"
+    }
+  ],
+  "our_funds_gaining_first_open_isin": 1841,
+  "our_etfs_gaining_first_open_isin": 937,
+  "our_funds_with_new_pairs": 1911
+}

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this ontology, registry, or the findings, please cite it."
+title: "Investment Fund Ontology (IFO): identifier governance over the public US fund universe"
+authors:
+  - family-names: "Rovai"
+    given-names: "Fabio"
+type: software
+license: CC-BY-4.0
+repository-code: "https://github.com/fabio-rovai/investment-fund-ontology"
+url: "https://gov.tesseract.academy/research/investment-fund-ontology"
+date-released: 2026-08-14
+version: 0.2.0
+keywords:
+  - ontology
+  - SHACL
+  - investment funds
+  - ISIN
+  - LEI
+  - identifier governance
+  - knowledge graph

@@ -331,6 +331,16 @@ ifosch:GLEIF-ISIN-LEI a skos:Concept ;
     skos:prefLabel "GLEIF ISIN-to-LEI relationship file"@en ;
     skos:definition "Open mapping file linking ISINs to the LEI of the issuing entity, published by GLEIF."@en .
 
+ifosch:OpenFIGI a skos:Concept ;
+    skos:inScheme ifosch:sources ;
+    skos:prefLabel "OpenFIGI mapping API"@en ;
+    skos:definition "Bloomberg's free mapping service over the OMG FIGI open standard; FIGIs are explicitly free to store and redistribute. Used to resolve ISINs to tickers and share-class FIGIs without licensed identifier data."@en .
+
+ifosch:SEC-NPORT a skos:Concept ;
+    skos:inScheme ifosch:sources ;
+    skos:prefLabel "SEC Form N-PORT structured data"@en ;
+    skos:definition "Structured extracts of Form N-PORT monthly portfolio filings. Holdings rows carry the issuer LEI and, per identifier row, the holding's ISIN and ticker, making public regulatory filings a lawful open source of identifier pairs."@en .
+
 #################################################################
 # Fund-feature registry (from N-CEN Part C flags)
 #################################################################

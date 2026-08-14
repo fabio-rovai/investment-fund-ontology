@@ -37,5 +37,11 @@ LATEST=$(curl -s -A "Mozilla/5.0" \
 curl -sL -A "$UA" -o isin_lei.zip "$LATEST"
 unzip -o -q isin_lei.zip
 
+echo "4/4 (v0.2) SEC Form N-PORT structured data, latest quarter (~440 MB)"
+curl -sL -A "$UA" -o 2026q2_nport.zip \
+  "https://www.sec.gov/files/dera/data/form-n-port-data-sets/2026q2_nport.zip"
+mkdir -p nport/2026q2
+unzip -o -q 2026q2_nport.zip -d nport/2026q2
+
 echo "done:"
 ls -la

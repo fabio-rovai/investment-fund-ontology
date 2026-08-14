@@ -151,6 +151,7 @@ ifo:SECSeriesId a owl:Class ; rdfs:subClassOf ifo:Identifier ; rdfs:label "SEC s
 ifo:SECClassId a owl:Class ; rdfs:subClassOf ifo:Identifier ; rdfs:label "SEC class identifier"@en .
 ifo:SECFileNumber a owl:Class ; rdfs:subClassOf ifo:Identifier ; rdfs:label "SEC file number identifier"@en .
 ifo:MICIdentifier a owl:Class ; rdfs:subClassOf ifo:Identifier ; rdfs:label "MIC identifier"@en .
+ifo:FIGI a owl:Class ; rdfs:subClassOf ifo:Identifier ; rdfs:label "FIGI identifier"@en .
 
 ifo:hasIssuedSecurityIdentifier a owl:ObjectProperty ;
     rdfs:label "has issued security identifier"@en ;
