@@ -1,0 +1,26 @@
+{
+  "upload_type": "software",
+  "title": "Investment Fund Ontology (IFO)",
+  "description": "An open OWL 2 ontology, SKOS identifier-scheme registry, and SHACL governance layer for registered investment fund data, built and validated against the full public US fund universe: 2,316 registrants, 14,841 funds and 43,344 share classes from the SEC, joined with 9,119,948 check-digit-validated GLEIF ISIN-to-LEI pairs into a 1.29 million triple knowledge graph with per-source provenance. Identifiers are first-class assertion nodes carrying scheme, source system and computed validation state, so cross-system disagreement is a query rather than an audit project. Ontology, registry and shapes are licensed CC BY 4.0; pipeline code is MIT.",
+  "creators": [
+    {
+      "name": "Rovai, Fabio",
+      "affiliation": "The Tesseract Academy (Kampakis and Co Ltd)"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "keywords": [
+    "ontology",
+    "SHACL",
+    "investment funds",
+    "financial data",
+    "register assurance",
+    "identifier governance"
+  ],
+  "related_identifiers": [
+    {
+      "relation": "isSupplementTo",
+      "identifier": "https://github.com/fabio-rovai/investment-fund-ontology"
+    }
+  ]
+}
