@@ -9,7 +9,7 @@ license: CC-BY-4.0
 repository-code: "https://github.com/fabio-rovai/investment-fund-ontology"
 url: "https://gov.tesseract.academy/research/investment-fund-ontology"
 date-released: 2026-08-14
-version: 0.2.0
+version: 0.2.1
 keywords:
   - ontology
   - SHACL

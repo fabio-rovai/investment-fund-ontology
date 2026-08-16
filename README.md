@@ -1,5 +1,7 @@
 # Investment Fund Ontology (IFO)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21970554.svg)](https://doi.org/10.5281/zenodo.21970554)
+
 An open OWL 2 ontology, SKOS identifier-scheme registry, and SHACL governance layer for registered investment fund data, built and validated against the full public US fund universe:
 
 - **2,316 registrants, 14,841 funds, 43,344 share classes** from the SEC Investment Company Series and Class dataset,
